@@ -1,5 +1,8 @@
 import pygame
 import random
+from math import fabs
+
+
 pygame.init()
 
 disPlay_height = 800
@@ -12,7 +15,7 @@ yB = (disPlay_height * .5)
 bChange = 0
 xG = (disPlay_width * .9)
 yG = (disPlay_height * .4)
-gravity = 3
+gravity = 5
 velocity = 0
 crashed = False
 d = {}
@@ -24,6 +27,13 @@ birdImg = pygame.image.load('bird.png')
 bg = pygame.image.load("bg.png")
 gunImg = pygame.image.load('gun.png')
 # ran = random.randint(1,3)
+
+
+def has_collided_with(rect1,rect2):
+    deltay = fabs(rect1.centery - rect2.centery)
+    deltax = fabs(rect1.centerx - rect2.centerx)
+    return deltay < rect2.height and deltax < rect2.width
+
 
 def bird(x,y):
     disPlay.blit(birdImg,(x,y))
@@ -43,16 +53,16 @@ while not crashed:
     disPlay.blit(bg, (0, 0))
     velocity =gravity
     yB += velocity
-    xG += -4
-    # disPlay.fill(bg)
+    xG += -6
     bird(xB,yB)
+    
     if guns:
         gun(xG,yG)
 
     if xG < -150:
         guns = False
         xG = (disPlay_width * 1.3)
-        yG = (200 + 7*10)
+        yG = (1 + 7*10)
 
     if yB > 550:
         yB=550
@@ -60,19 +70,16 @@ while not crashed:
     if yB < 0:
         yB=0
 
-
     if pressed[pygame.K_SPACE]:
-        yB += -14
+        yB += -16
+
     if pressed[pygame.K_l]:
         guns = True
-        #xG = (disPlay_width * 1)
-
 
 
     print(xG,yB)
 
     pygame.display.update()
-    clock.tick(600)
-    # print(xG)
+    clock.tick(60)
 
 pygame.quit()
